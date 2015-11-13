@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+NOW=$(date -u +"%Y%m%d%H%M%S")
+echo "Creating file: sql/V${NOW}__${1}.sql"
+touch "sql/V${NOW}__${1}.sql"

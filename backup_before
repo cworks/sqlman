@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+database=payroll
+backupFile=payroll.before.backup.sql
+
+echo "Backup ${database} to ${backupFile}"
+mysqldump -u corbett --password=rockon123 payroll > "backups/${backupFile}"
