@@ -10,7 +10,9 @@
  *     --password
  * =============================================================================
  */
-var sqlman = require('./sqlman.js');
+var sqlman = require('./sqlman');
+var out = require('./src/js/out');
+var dt = require('./src/js/datetime');
 var shell  = require('shelljs');
 var args   = require('minimist')(process.argv.slice(2), {
     boolean: ['append','zip','debug'],
@@ -18,22 +20,22 @@ var args   = require('minimist')(process.argv.slice(2), {
 });
 
 function usage() {
-    sqlman.println("----------------------------------------------------------").cyan();
-    sqlman.print("backup ").white();
-    sqlman.println("[db]").red();
-    sqlman.println("----------------------------------------------------------").cyan();
-    sqlman.print("    --db      ").yellow();
-    sqlman.println("database name").cyan();
-    sqlman.print("    --dir     ").yellow();
-    sqlman.println("directory to place backup file").cyan();
-    sqlman.print("    --zip     ").yellow();
-    sqlman.println("zip the backup file").cyan();
-    sqlman.print("    --append  ").yellow();
-    sqlman.println("append datetime to backup file").cyan();
-    sqlman.print("    --help    ").yellow();
-    sqlman.println("print this usage info and exit").cyan();
-    sqlman.print("    --version ").yellow();
-    sqlman.println("print version info and exit").cyan();
+    out.println.cyan("----------------------------------------------------------");
+    out.print.white("backup ");
+    out.println.red("[db]");
+    out.println.cyan("----------------------------------------------------------");
+    out.print.yellow("    --db      ");
+    out.println.cyan("database name");
+    out.print.yellow("    --dir     ");
+    out.println.cyan("directory to place backup file");
+    out.print.yellow("    --zip     ");
+    out.println.cyan("zip the backup file");
+    out.print.yellow("    --append  ");
+    out.println.cyan("append datetime to backup file");
+    out.print.yellow("    --help    ");
+    out.println.cyan("print this usage info and exit");
+    out.print.yellow("    --version ");
+    out.println.cyan("print version info and exit");
 }
 /*
  * =============================================================================
@@ -42,20 +44,20 @@ function usage() {
  */
 function backup() {
     var db = "", target = "", iszip = false;
-
     if(args.debug) {
-        shell.echo(args);
+        out.println.yellow(args);
     }
     if(args.h) {
         usage();
         process.exit(0);
     }
     if(args.v) {
-        sqlman.println(sqlman.version()).cyan();
+        out.println.cyan(sqlman.version());
         process.exit(0);
     }
     if(!args.db && !args._[0]) {
-        sqlman.println("Pretty please with sugar on top...provide a db.").red();
+        out.println.cyan("----------------------------------------------------------");        
+        out.println.red("Pretty please with sugar on top...provide a db.");
         usage();
         process.exit(1);
     }
@@ -67,7 +69,7 @@ function backup() {
 
     var backupFile = db + "_backup";
     if(args.append) {
-        backupFile += "_" + sqlman.datetime().nowSuffix();
+        backupFile += "_" + dt().nowSuffix();
     }
     backupFile += ".sql";
 
@@ -79,8 +81,8 @@ function backup() {
 
     shell.exec(cmd, function(code) {
         if(code !== 0) {
-            shell.echo("Exit code: ".red + code
-                + " was none zero, this backup may have failed.".red);
+            out.println.red("Exit code: " + code
+                + " was none zero, this backup may have failed.");
         }
     });
 

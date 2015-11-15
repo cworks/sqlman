@@ -1,3 +1,13 @@
+var util = require('util');
+
+function _toString(thing) {
+    if(util.isString(thing)) {
+        return thing;
+    } else {
+        return JSON.stringify(thing);
+    }
+};
+exports.toString = _toString;
 
 function _version() {
     return "sqlman version: 1.0.0";
