@@ -1,0 +1,12 @@
+{
+    "name" : "sqlman",
+    "version" : "1.0.0",
+    "description" : "Sunshine on MySQL makes me happy",
+    "repository" : "https://github.com/cworks/sqlman",
+    "dependencies" : {
+        "colors" : "1.1.2",
+        "shelljs" : "0.5.3",
+        "handlebars" : "4.0.4",
+        "minimist" : "1.2.0"
+    }
+}

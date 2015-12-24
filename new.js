@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 var sqlman = require('./sqlman.js');
-var shell  = require('shelljs');
+var io = require('./src/js/io');
+var out = require('./src/js/out');
+var dt = require('./src/js/datetime');
 var path = require('path');
 var handlebars = require('handlebars');
 var args = require('minimist')(process.argv.slice(2), {
@@ -26,42 +28,40 @@ function template(file, created) {
 }
 
 function usage() {
-    sqlman.println("----------------------------------------------------------").cyan();
-    sqlman.print("new ").white();
-    sqlman.println("[sql/file/to/create]").red();
-    sqlman.println("----------------------------------------------------------").cyan();
-    sqlman.print("    --help    ").yellow();
-    sqlman.println("print this usage info and exit").cyan();
-    sqlman.print("    --version ").yellow();
-    sqlman.println("print version info and exit").cyan();
+    out.println.cyan("----------------------------------------------------------");
+    out.print.white("new ");
+    out.println.red("[sql/file/to/create]");
+    out.println.cyan("----------------------------------------------------------");
+    out.print.yellow("    --help    ");
+    out.println.cyan("print this usage info and exit");
+    out.print.yellow("    --version ");
+    out.println.cyan("print version info and exit");
 }
 
 function newFile() {
     if(args.debug) {
-        shell.echo(args);
-        return;
+        out.println.yellow(args);
     }
     if(args.h) {
         usage();
         process.exit(0);
     }
     if(args.v) {
-        sqlman.println(sqlman.version()).cyan();
+        out.println.cyan(sqlman.version());
         process.exit(0);
     }
     if(!args._[0]) {
-        sqlman.println("Uh...we'll take that SQL file now.").red();
+        out.println.cyan("----------------------------------------------------------");
+        out.println.red("Uh...I'll take filename now.");
         usage();
         process.exit(1);
     }
 
     var file = path.basename(args._[0]);
     var dir = path.dirname(args._[0]);
-    file = 'V_' + sqlman.datetime().nowSuffix() + "__" + file;
+    file = 'V_' + dt().nowSuffix() + "__" + file;
 
-    sqlman.io().newFile(dir + "/" + file,
-        template(dir + "/" + file,
-            sqlman.datetime().now()));
+    io().newFile(dir + "/" + file, template(dir + "/" + file, dt().now()));
 
 }
 
